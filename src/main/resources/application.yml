@@ -1,0 +1,34 @@
+# SPRING PROPERTIES
+spring:
+  output:
+    ansi:
+      enabled: always
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+  redis:
+    host: redis-server
+    port: 6379
+    password: rediscache
+
+server:
+  port: 8005
+  ssl:
+    enabled: false
+  tomcat:
+    max-threads: 50
+    max-connections: 50
+    connection-timeout: 10s
+
+# LOGGING PROPERTIES
+logging:
+  level:
+   org:
+    apache:
+     fop: ERROR
+     xmlgraphics : ERROR
+
+
+
+

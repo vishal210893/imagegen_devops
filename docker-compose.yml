@@ -1,0 +1,13 @@
+version: '3'
+services:
+  redis-server:
+    image: redis
+    container_name: redis_cache
+    command: redis-server --requirepass "rediscache"
+    ports:
+    - 6378:6379
+  image-poc:
+    image: ubuntu/imagepoc:1
+    container_name: imagepoc
+    ports:
+      - 5000:8005
