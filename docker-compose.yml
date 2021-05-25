@@ -6,8 +6,10 @@ services:
     command: redis-server --requirepass "rediscache"
     ports:
     - 6378:6379
+    restart: always
   image-poc:
     image: ubuntu/imagepoc:1
     container_name: imagepoc
     ports:
       - 5000:8005
+    restart: always
