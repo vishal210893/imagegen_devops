@@ -1,0 +1,15 @@
+FROM maven:3.8.1-jdk-8-slim AS build
+WORKDIR /home/application
+# COPY FROM CURRENT DIR (./) TO CURRENT WORKING DIR OF CONTAINER (./) WHICH IS ASSIGNED WITH WORKDIR
+COPY ./ ./
+RUN mvn -f pom.xml clean install
+
+
+FROM azul/zulu-openjdk:8
+VOLUME /tmp
+VOLUME /opt/aims
+VOLUME /opt/file
+WORKDIR /opt/aims
+COPY --from=build /home/application/target/*.jar /imagepoc.jar
+EXPOSE 8005
+ENTRYPOINT exec java -jar /opt/aims/imagepoc.jar

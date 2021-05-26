@@ -52,13 +52,6 @@
             <artifactId>commons-text</artifactId>
             <version>1.7</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-all -->
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-all</artifactId>
-            <version>1.14</version>
-            <type>pom</type>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -221,5 +214,6 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>imagepoc</finalName>
     </build>
 </project>

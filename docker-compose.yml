@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 services:
   redis-server:
     image: redis
@@ -8,6 +8,11 @@ services:
     - 6378:6379
     restart: always
   image-poc:
+    build:
+      # context: . (. specify current working directory)
+      context: .
+      # To specify location of dockerfile
+      dockerfile: dockerfile
     image: ubuntu/imagepoc:1
     container_name: imagepoc
     volumes:
