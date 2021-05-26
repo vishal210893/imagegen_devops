@@ -19,4 +19,6 @@ services:
     - /home/vishal/Desktop/dockermount:/opt/file
     ports:
       - 5000:8005
+    environment:
+      imagepoc_env_value: from docker
     restart: always

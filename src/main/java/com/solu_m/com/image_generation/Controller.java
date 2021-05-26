@@ -2,6 +2,7 @@ package com.solu_m.com.image_generation;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
@@ -22,6 +23,9 @@ public class Controller {
     private static final String REDIS_ENTITY = "redis";
 
     public static int i = 1;
+
+    @Value("${imagepoc_env_value:DEFAULT}")
+    private String ENV_VALUE;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -52,7 +56,8 @@ public class Controller {
     @GetMapping(value = "/readfile", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> readFile() throws IOException {
         FileInputStream fis = new FileInputStream("/opt/file/fileTest.txt");
-        String data = IOUtils.toString(fis, "UTF-8");
+        String data = IOUtils.toString(fis, "UTF-8").concat("-" + ENV_VALUE);
         return ResponseEntity.ok().body(String.valueOf(data));
     }
+
 }
