@@ -10,6 +10,8 @@ services:
   image-poc:
     image: ubuntu/imagepoc:1
     container_name: imagepoc
+    volumes:
+    - /home/vishal/Desktop/dockermount:/opt/file
     ports:
       - 5000:8005
     restart: always

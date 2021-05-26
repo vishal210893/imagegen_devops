@@ -1,5 +1,6 @@
 package com.solu_m.com.image_generation;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -32,17 +35,24 @@ public class Controller {
     }
 
     @GetMapping(value = "/getvalue", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getvalue() {
+    public ResponseEntity<String> getValue() {
         HashOperations<String, Object, Object> stringObjectObjectHashOperations = redisTemplate.opsForHash();
         int value = (int) stringObjectObjectHashOperations.get(REDIS_ENTITY, "value");
         return ResponseEntity.ok().body(String.valueOf(value));
     }
 
     @GetMapping(value = "/putvalue", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> putvalue() {
+    public ResponseEntity<String> putValue() {
         HashOperations<String, Object, Object> stringObjectObjectHashOperations = redisTemplate.opsForHash();
         int i = Controller.i++;
         stringObjectObjectHashOperations.put(REDIS_ENTITY, "value", i);
         return ResponseEntity.ok().body(String.valueOf(i));
+    }
+
+    @GetMapping(value = "/readfile", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> readFile() throws IOException {
+        FileInputStream fis = new FileInputStream("/opt/file/fileTest.txt");
+        String data = IOUtils.toString(fis, "UTF-8");
+        return ResponseEntity.ok().body(String.valueOf(data));
     }
 }
