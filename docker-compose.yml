@@ -18,9 +18,9 @@ services:
       - 3050:80
   image-poc:
     build:
-      # context: . (. specify current working directory)
+      # context: specify the location of dockerfile (.(dot) = current working directory)
       context: .
-      # To specify location of dockerfile
+      # To specify name of dockerfile
       dockerfile: dockerfile
     image: ubuntu/imagepoc:1
     container_name: imagepoc
