@@ -7,6 +7,13 @@ services:
     ports:
     - 6378:6379
     restart: always
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile-nginx
+    ports:
+      - 3050:80
   image-poc:
     build:
       # context: . (. specify current working directory)
@@ -20,5 +27,18 @@ services:
     ports:
       - 5000:8005
     environment:
-      imagepoc_env_value: from docker
+      env_value: Server 1
+    restart: always
+  devops:
+    build:
+      # context: . (. specify current working directory)
+      context: /home/vishal/Documents/workspace-spring-tool-suite-4-4.3.1.RELEASE/kubernetes/Devops-rest-api
+      # To specify location of dockerfile
+      dockerfile: Dockerfile
+    image: ubuntu/devops:1
+    container_name: devops
+    ports:
+      - 5001:8006
+    environment:
+      env_value: Server 2
     restart: always

@@ -24,8 +24,16 @@ public class Controller {
 
     public static int i = 1;
 
-    @Value("${imagepoc_env_value:DEFAULT}")
+    @Value("${env_value:DEFAULT}")
     private String ENV_VALUE;
+
+    private static final String HOST_NAME = "HOSTNAME";
+
+    private static final String DEFAULT_ENV_INSTANCE_GUID = "LOCAL";
+
+    // @Value(${ENVIRONMENT_VARIABLE_NAME:DEFAULT_VALUE})
+    @Value("${" + HOST_NAME + ":" + DEFAULT_ENV_INSTANCE_GUID + "}")
+    private String hostName;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -56,8 +64,13 @@ public class Controller {
     @GetMapping(value = "/readfile", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> readFile() throws IOException {
         FileInputStream fis = new FileInputStream("/opt/file/fileTest.txt");
-        String data = IOUtils.toString(fis, "UTF-8").concat("-" + ENV_VALUE);
+        String data = IOUtils.toString(fis, "UTF-8").concat("-" + hostName);
         return ResponseEntity.ok().body(String.valueOf(data));
+    }
+
+    @GetMapping(path = "/service")
+    public String helloWorld() {
+        return "Environment Name " + " - " + ENV_VALUE + " - " + hostName;
     }
 
 }

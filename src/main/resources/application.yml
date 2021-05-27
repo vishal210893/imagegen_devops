@@ -17,9 +17,12 @@ server:
   ssl:
     enabled: false
   tomcat:
-    max-threads: 50
     max-connections: 50
     connection-timeout: 10s
+    threads:
+      max: 50
+  servlet:
+    context-path: /imagepoc
 
 # LOGGING PROPERTIES
 logging:
