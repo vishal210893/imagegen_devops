@@ -1,4 +1,4 @@
-package com.solu_m.com.image_generation;
+package com.solu_m.com.docker_poc_1;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

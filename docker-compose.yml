@@ -16,14 +16,14 @@ services:
     container_name: nginx-server
     ports:
       - 3050:80
-  image-poc:
+  dockerpoc-1:
     build:
       # context: specify the location of dockerfile (.(dot) = current working directory)
       context: .
       # To specify name of dockerfile
       dockerfile: dockerfile
-    image: ubuntu/imagepoc:1
-    container_name: imagepoc
+    image: ubuntu/docker_poc-1:1
+    container_name: docker_poc-1
     volumes:
     - /home/vishal/Desktop/dockermount:/opt/file
     ports:
@@ -31,16 +31,16 @@ services:
     environment:
       env_value: Server 1
     restart: always
-  devops:
+  dockerpoc-2:
     build:
-      context: /home/vishal/Documents/workspace-spring-tool-suite-4-4.3.1.RELEASE/kubernetes/Devops-rest-api
+      context: /home/vishal/Desktop/Docker_Poc-2
       dockerfile: Dockerfile
-    image: ubuntu/devops:1
-    container_name: devops
+    image: ubuntu/docker_poc-2:1
+    container_name: docker_poc-2
     #ports:
     #  - 5001:8006
     environment:
       env_value: Server 2
     # We can specify starting command in docker-compose also instead of in dockerfile
-    entrypoint: [ "sh", "-c", "java -jar /opt/aims/devops.jar"]
+    entrypoint: [ "sh", "-c", "java -jar /opt/aims/docker_poc-2.jar"]
     restart: always

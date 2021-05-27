@@ -3,10 +3,6 @@ spring:
   output:
     ansi:
       enabled: always
-  servlet:
-    multipart:
-      max-file-size: 1GB
-      max-request-size: 1GB
   redis:
     host: redis-server
     port: 6379
@@ -22,15 +18,7 @@ server:
     threads:
       max: 50
   servlet:
-    context-path: /imagepoc
-
-# LOGGING PROPERTIES
-logging:
-  level:
-   org:
-    apache:
-     fop: ERROR
-     xmlgraphics : ERROR
+    context-path: /dockerpoc1
 
 
 
