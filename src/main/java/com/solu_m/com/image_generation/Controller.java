@@ -48,9 +48,13 @@ public class Controller {
 
     @GetMapping(value = "/getvalue", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getValue() {
-        HashOperations<String, Object, Object> stringObjectObjectHashOperations = redisTemplate.opsForHash();
-        int value = (int) stringObjectObjectHashOperations.get(REDIS_ENTITY, "value");
-        return ResponseEntity.ok().body(String.valueOf(value));
+        try {
+            HashOperations<String, Object, Object> stringObjectObjectHashOperations = redisTemplate.opsForHash();
+            int value = (int) stringObjectObjectHashOperations.get(REDIS_ENTITY, "value");
+            return ResponseEntity.ok().body(String.valueOf(value));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body("No value in Redis cache");
+        }
     }
 
     @GetMapping(value = "/putvalue", produces = MediaType.APPLICATION_JSON_VALUE)
