@@ -12,7 +12,7 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile-nginx
-    image: ubuntu/nginx:1
+    image: vishal210893/nginx:1
     container_name: nginx-server
     ports:
       - 3050:80
@@ -22,7 +22,7 @@ services:
       context: .
       # To specify name of dockerfile
       dockerfile: dockerfile
-    image: ubuntu/dockerpoc-1:1
+    image: vishal210893/dockerpoc-1:1
     container_name: dockerpoc-1
     volumes:
     - /home/vishal/Desktop/dockermount:/opt/file
@@ -35,7 +35,7 @@ services:
     build:
       context: /home/vishal/Desktop/DockerPoc-2
       dockerfile: Dockerfile
-    image: ubuntu/dockerpoc-2:1
+    image: vishal210893/dockerpoc-2:1
     container_name: dockerpoc-2
     #ports:
     #  - 5001:8006
