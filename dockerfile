@@ -3,6 +3,6 @@ VOLUME /tmp
 VOLUME /opt/aims
 VOLUME /opt/file
 WORKDIR /opt/aims
-ADD ./target/docker_poc-1.jar docker_poc-1.jar
+ADD ./target/dockerpoc-1.jar dockerpoc-1.jar
 EXPOSE 8005
-ENTRYPOINT exec java -jar /opt/aims/docker_poc-1.jar
+ENTRYPOINT exec java -jar /opt/aims/dockerpoc-1.jar

@@ -22,8 +22,8 @@ services:
       context: .
       # To specify name of dockerfile
       dockerfile: dockerfile
-    image: ubuntu/docker_poc-1:1
-    container_name: docker_poc-1
+    image: ubuntu/dockerpoc-1:1
+    container_name: dockerpoc-1
     volumes:
     - /home/vishal/Desktop/dockermount:/opt/file
     ports:
@@ -35,12 +35,12 @@ services:
     build:
       context: /home/vishal/Desktop/Docker_Poc-2
       dockerfile: Dockerfile
-    image: ubuntu/docker_poc-2:1
-    container_name: docker_poc-2
+    image: ubuntu/dockerpoc-2:1
+    container_name: dockerpoc-2
     #ports:
     #  - 5001:8006
     environment:
       env_value: Server 2
     # We can specify starting command in docker-compose also instead of in dockerfile
-    entrypoint: [ "sh", "-c", "java -jar /opt/aims/docker_poc-2.jar"]
+    entrypoint: [ "sh", "-c", "java -jar /opt/aims/dockerpoc-2.jar"]
     restart: always

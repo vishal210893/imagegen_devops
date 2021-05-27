@@ -79,6 +79,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>docker_poc-1</finalName>
+        <finalName>dockerpoc-1</finalName>
     </build>
 </project>
