@@ -33,7 +33,7 @@ services:
     restart: always
   dockerpoc-2:
     build:
-      context: /home/vishal/Desktop/Docker_Poc-2
+      context: /home/vishal/Desktop/DockerPoc-2
       dockerfile: Dockerfile
     image: ubuntu/dockerpoc-2:1
     container_name: dockerpoc-2
