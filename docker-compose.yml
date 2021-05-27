@@ -2,7 +2,7 @@ version: '3.4'
 services:
   redis-server:
     image: redis
-    container_name: redis_cache
+    container_name: redis-cache
     command: redis-server --requirepass "rediscache"
     ports:
     - 6378:6379
@@ -12,6 +12,8 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile-nginx
+    image: ubuntu/nginx:1
+    container_name: nginx-server
     ports:
       - 3050:80
   image-poc:
@@ -31,14 +33,12 @@ services:
     restart: always
   devops:
     build:
-      # context: . (. specify current working directory)
       context: /home/vishal/Documents/workspace-spring-tool-suite-4-4.3.1.RELEASE/kubernetes/Devops-rest-api
-      # To specify location of dockerfile
       dockerfile: Dockerfile
     image: ubuntu/devops:1
     container_name: devops
-    ports:
-      - 5001:8006
+    #ports:
+    #  - 5001:8006
     environment:
       env_value: Server 2
     restart: always
