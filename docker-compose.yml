@@ -41,4 +41,6 @@ services:
     #  - 5001:8006
     environment:
       env_value: Server 2
+    # We can specify starting command in docker-compose also instead of in dockerfile
+    entrypoint: [ "sh", "-c", "java -jar /opt/aims/devops.jar"]
     restart: always
