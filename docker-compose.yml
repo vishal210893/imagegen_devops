@@ -37,8 +37,8 @@ services:
       dockerfile: Dockerfile
     image: vishal210893/dockerpoc-2:1
     container_name: dockerpoc-2
-    #ports:
-    #  - 5001:8006
+    ports:
+      - 5001:8006
     environment:
       env_value: Server 2
     # We can specify starting command in docker-compose also instead of in dockerfile

@@ -1,5 +1,6 @@
 package com.solu_m.com.docker_poc_1;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,13 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
+import javax.management.Attribute;
+import java.io.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/v1")
+@Slf4j
 public class Controller {
 
     private static final String REDIS_ENTITY = "redis";
@@ -31,18 +34,65 @@ public class Controller {
 
     private static final String DEFAULT_ENV_INSTANCE_GUID = "LOCAL";
 
-    // @Value(${ENVIRONMENT_VARIABLE_NAME:DEFAULT_VALUE})
     @Value("${" + HOST_NAME + ":" + DEFAULT_ENV_INSTANCE_GUID + "}")
     private String hostName;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    private Long size;
+
+
     @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HashMap<String, String>> welcomeMapping() {
-        HashMap<String, String> start = new HashMap<>();
-        start.put("name", "IG POC");
-        start.put("date", new Date().toString());
+    public ResponseEntity<HashMap<String, Object>> welcomeMapping() throws Exception {
+        HashMap<String, Object> start = new LinkedHashMap<>();
+        start.put("microservice name", "DockerPoc-1");
+        start.put("version", 1.0);
+        start.put("docker instance", hostName);
+        start.put("java version", System.getProperty("java.version"));
+        start.put("spring boot version", "2.3.4.RELEASE");
+        HashMap<String, String> osInfo = new HashMap<>();
+        String[] cmd = {"/bin/sh", "-c", "cat /etc/*-release"};
+        try {
+            Process p = Runtime.getRuntime().exec(cmd);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] split = line.split("=");
+                if (split.length > 1) {
+                    osInfo.put(split[0], split[1].replace("\"", ""));
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        start.put("os info", osInfo);
+
+        HashMap<String, Object> systemInfo = new LinkedHashMap<>();
+        systemInfo.put("total no. of thread", Runtime.getRuntime().availableProcessors());
+        int mb = 1024 * 1024;
+        String[] attr = {"TotalPhysicalMemorySize", "FreePhysicalMemorySize"};
+        OperatingSystemMXBean op = ManagementFactory.getOperatingSystemMXBean();
+        List<Attribute> al;
+        try {
+            al = ManagementFactory.getPlatformMBeanServer()
+                    .getAttributes(op.getObjectName(), attr).asList();
+        } catch (Exception ex) {
+            al = Collections.emptyList();
+        }
+        for (Attribute a : al) {
+            Long size = Long.parseLong(String.valueOf(a.getValue())) / mb;
+            systemInfo.put(a.getName().toLowerCase(), size);
+        }
+        start.put("system info", systemInfo);
+
+        HashMap<String, Object> jvmInfo = new LinkedHashMap<>();
+        jvmInfo.put("max jvm memory", Runtime.getRuntime().maxMemory() / mb);
+        jvmInfo.put("total jvm memory", Runtime.getRuntime().totalMemory() / mb);
+        jvmInfo.put("free jvm memory", Runtime.getRuntime().freeMemory() / mb);
+        start.put("jvm stats", jvmInfo);
+
+        log.debug("version endpoint called {}", start);
         return ResponseEntity.ok().body(start);
     }
 
