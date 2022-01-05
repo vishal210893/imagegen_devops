@@ -1,0 +1,103 @@
+# DEPLOYMENT.YAML
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dockerpoc-1-deployment
+  labels:
+    canbeanykey: canbeanyvalue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: dockerpoc-1
+  template:
+    metadata:
+      labels:
+        component: dockerpoc-1
+    spec:
+      containers:
+        - name: dockerpoc-1
+          image: vishal210893/dockerpoc-1:7
+          ports:
+            - containerPort: 8005
+          env:
+            - name: env_value
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: SECRET-VALUE
+          volumeMounts:
+            - mountPath: /opt/file
+              name: filestorage
+      volumes:
+        - name: filestorage
+          persistentVolumeClaim:
+            claimName: file-pvc
+
+---
+# CLUSTER-IP.YAML
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockerpoc-1-cluster-ip
+spec:
+  type: ClusterIP
+  selector:
+    component: dockerpoc-1
+  ports:
+    - port: 8005
+      targetPort: 8005
+
+---
+# PV.YAML
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-volume
+spec:
+  storageClassName: manual
+  capacity:
+    storage: "1Gi"
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /home/mount
+
+---
+# PVC.YAML
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: file-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+# SECRET.YAML
+apiVersion: v1
+kind: Secret
+metadata:
+  name: env-secret
+type: generic
+stringData:
+  SECRET-VALUE: minikube node from secret
+
+---
+# NODEPORT.YAML
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockerpoc-1-node-port
+spec:
+  type: NodePort
+  ports:
+    - port: 8006
+      targetPort: 8005
+      nodePort: 30555
+  selector:
+    component: dockerpoc-1

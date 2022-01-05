@@ -13,10 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.management.Attribute;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1")
@@ -30,11 +36,7 @@ public class Controller {
     @Value("${env_value:DEFAULT}")
     private String ENV_VALUE;
 
-    private static final String HOST_NAME = "HOSTNAME";
-
-    private static final String DEFAULT_ENV_INSTANCE_GUID = "LOCAL";
-
-    @Value("${" + HOST_NAME + ":" + DEFAULT_ENV_INSTANCE_GUID + "}")
+    @Value("${HOSTNAME:LOCAL}")
     private String hostName;
 
     @Autowired
@@ -44,7 +46,7 @@ public class Controller {
 
 
     @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HashMap<String, Object>> welcomeMapping() throws Exception {
+    public ResponseEntity<HashMap<String, Object>> welcomeMapping() {
         HashMap<String, Object> start = new LinkedHashMap<>();
         start.put("microservice name", "DockerPoc-1");
         start.put("version", 1.0);
@@ -119,7 +121,7 @@ public class Controller {
     public ResponseEntity<String> readFile() throws IOException {
         FileInputStream fis = new FileInputStream("/opt/file/fileTest.txt");
         String data = IOUtils.toString(fis, "UTF-8").concat("-" + hostName);
-        return ResponseEntity.ok().body(String.valueOf(data));
+        return ResponseEntity.ok().body(data);
     }
 
     @GetMapping(path = "/service")
