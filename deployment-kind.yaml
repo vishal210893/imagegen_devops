@@ -135,47 +135,6 @@ spec:
 
 ---
 
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  namespace: default
-  name: pod-and-pod-logs-reader
-rules:
-  - apiGroups: [""]
-    resources: ["pods", "pods/log"]
-    verbs: ["get", "list"]
-
----
-
-apiVersion: rbac.authorization.k8s.io/v1
-# This role binding allows "dave" to read secrets in the "development" namespace.
-# You need to already have a ClusterRole named "secret-reader".
-kind: RoleBinding
-metadata:
-  name: read-pod
-  #
-  # The namespace of the RoleBinding determines where the permissions are granted.
-  # This only grants permissions within the "development" namespace.
-  namespace: default
-subjects:
-  - kind: ServiceAccount
-    name: my-serviceaccount
-    namespace: default
-roleRef:
-  kind: Role
-  name: pod-and-pod-logs-reader
-  apiGroup: rbac.authorization.k8s.io
-
----
-
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: my-serviceaccount
-  namespace: default
-
----
-
 ## NODEPORT.YAML
 #apiVersion: v1
 #kind: Service
