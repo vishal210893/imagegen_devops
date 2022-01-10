@@ -113,19 +113,19 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: 'nginx'
     nginx.ingress.kubernetes.io/use-regex: 'true'
-    #nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
     - http:
         paths:
-          - path: /dockerpoc1
+          - path: /docker/(.*)
             pathType: Prefix
             backend:
               service:
                 name: dockerpoc-1-cluster-ip
                 port:
                   number: 8005
-          - path: /cloudtest
+          - path: /cloud/(.*)
             pathType: Prefix
             backend:
               service:
