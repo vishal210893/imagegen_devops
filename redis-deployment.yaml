@@ -19,7 +19,6 @@ spec:
             - containerPort: 6379
           args: [ "--requirepass", "rediscache" ]
 
-
 ---
 
 apiVersion: v1
