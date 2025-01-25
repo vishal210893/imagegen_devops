@@ -1,0 +1,28 @@
+#  kubectl taint node k3d-kubevela-agent-1 company=vishal:NoSchedule
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: tainttest
+  name: tainttest
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: tainttest
+  strategy: { }
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: tainttest
+    spec:
+      containers:
+        - image: httpd:latest
+          name: httpd
+      tolerations:
+        - key: company
+          value: vishal
+          operator: Equal
+          effect: NoSchedule
