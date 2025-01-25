@@ -3,10 +3,6 @@ spring:
   output:
     ansi:
       enabled: always
-  redis:
-    host: redis-server
-    port: 6379
-    password: rediscache
 
 server:
   port: 8005
@@ -19,6 +15,10 @@ server:
       max: 50
   servlet:
     context-path: /dockerpoc1
+
+logging:
+  level:
+    root: debug
 
 
 

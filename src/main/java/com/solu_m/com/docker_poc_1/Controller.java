@@ -2,10 +2,7 @@ package com.solu_m.com.docker_poc_1;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +26,6 @@ import java.util.List;
 @Slf4j
 public class Controller {
 
-    private static final String REDIS_ENTITY = "redis";
-
     public static int i = 1;
 
     @Value("${env_value:DEFAULT}")
@@ -38,12 +33,6 @@ public class Controller {
 
     @Value("${HOSTNAME:LOCAL}")
     private String hostName;
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    private Long size;
-
 
     @GetMapping(value = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HashMap<String, Object>> welcomeMapping() {
@@ -96,25 +85,6 @@ public class Controller {
 
         log.debug("version endpoint called {}", start);
         return ResponseEntity.ok().body(start);
-    }
-
-    @GetMapping(value = "/getvalue", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getValue() {
-        try {
-            HashOperations<String, Object, Object> stringObjectObjectHashOperations = redisTemplate.opsForHash();
-            int value = (int) stringObjectObjectHashOperations.get(REDIS_ENTITY, "value");
-            return ResponseEntity.ok().body(String.valueOf(value));
-        } catch (Exception e) {
-            return ResponseEntity.ok().body("No value in Redis cache");
-        }
-    }
-
-    @GetMapping(value = "/putvalue", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> putValue() {
-        HashOperations<String, Object, Object> stringObjectObjectHashOperations = redisTemplate.opsForHash();
-        int i = Controller.i++;
-        stringObjectObjectHashOperations.put(REDIS_ENTITY, "value", i);
-        return ResponseEntity.ok().body(String.valueOf(i));
     }
 
     @GetMapping(value = "/readfile", produces = MediaType.APPLICATION_JSON_VALUE)

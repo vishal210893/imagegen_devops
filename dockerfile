@@ -1,4 +1,10 @@
-FROM azul/zulu-openjdk:8
+FROM azul/zulu-openjdk:17
+
+# Update package lists and install curl
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
 VOLUME /tmp
 VOLUME /opt/aims
 VOLUME /opt/file
