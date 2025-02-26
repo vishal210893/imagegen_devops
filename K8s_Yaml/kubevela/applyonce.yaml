@@ -1,0 +1,16 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: apply-once-app
+spec:
+  components:
+    - name: hello-world
+      type: configmap-component
+      properties:
+        firstkey: "parameter.firstkey"
+        secondkey: "parameter.secondkey"
+#  policies:
+#    - name: apply-once
+#      type: apply-once
+#      properties:
+#        enable: true

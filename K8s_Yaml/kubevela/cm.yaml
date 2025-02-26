@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  firstkey: "1"
+  secondkey: "2"
+kind: ConfigMap
+metadata:
+  name: hello-world
+  namespace: default

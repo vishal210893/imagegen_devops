@@ -1,0 +1,37 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: sample-webapp
+spec:
+  components:
+    - name: my-web
+      type: webservice
+      properties:
+        image: "vishal210893/dockerpoc-1:11"
+        ports:
+          - port: 8005
+            expose: true
+        cpu: "0.5"
+      traits:
+        - type: scaler
+          properties:
+            replicas: 2
+        - type: hpa
+          properties:
+            targetAPIVersion: apps/v1
+            targetKind: Deployment
+            max: 5
+            min: 1
+            cpu:
+              type: Utilization
+              value: 10
+  policies:
+    - name: apply-once
+      type: apply-once
+      properties:
+        enable: true
+        rules:
+          - strategy:
+              path: [ "spec.replicas" ]
+            selector:
+              resourceTypes: [ "Deployment" ]

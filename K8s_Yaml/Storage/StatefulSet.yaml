@@ -40,7 +40,9 @@ spec:
         resources:
           requests:
             storage: 100Mi
+
 ---
+# HEADLESS SERVICE
 apiVersion: v1
 kind: Service
 metadata:
@@ -56,6 +58,7 @@ spec:
   clusterIP: None
 
 ---
+# STORAGE CLASS
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -65,18 +68,40 @@ parameters:
   type: pd-ssd
 
 ---
+# PV 1
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfsvol
+  name: mongopv1
   labels:
     storage: nfsstorage
 spec:
   storageClassName: nfsvolstorage
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   capacity:
     storage: 100Mi
   hostPath:
     path: /Users/viskumar/mountpath
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete
+
+---
+# PV 2
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongopv2
+  labels:
+    storage: nfsstorage
+spec:
+  storageClassName: nfsvolstorage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Mi
+  hostPath:
+    path: /Users/viskumar/mountpath
+  persistentVolumeReclaimPolicy: Delete
+
+# MONGO CLIENT
+# kc run -it --rm --image=mongo:8.0 mongoclient --restart=Never -- mongosh mongodb://mongo-0.mongosvc.default.svc.cluster.local:27017
